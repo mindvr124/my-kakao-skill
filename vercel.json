@@ -1,7 +1,14 @@
 {
-    "functions": {
-      "api/skill.js": {
-        "maxDuration": 10
+    "builds": [
+      {
+        "src": "api/skill.py",
+        "use": "@vercel/python"
       }
-    }
+    ],
+    "routes": [
+      {
+        "src": "/api/skill",
+        "dest": "/api/skill.py"
+      }
+    ]
   }
