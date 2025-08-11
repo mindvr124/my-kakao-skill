@@ -1,63 +1,37 @@
-export default async function handler(req, res) {
-  console.log('=== Kakao Skill Request ===');
-  console.log('Method:', req.method);
-  console.log('Headers:', req.headers);
-  console.log('Raw Body:', req.body);
-
+// Vercel 환경에서 body를 수동으로 파싱
+export default function handler(req, res) {
+  console.log('Request received:', req.method);
+  
   if (req.method === 'GET') {
-    return res.status(200).json({ 
-      message: 'Kakao Skill Server is running',
-      status: 'OK',
-      timestamp: new Date().toISOString()
-    });
+    return res.status(200).json({ status: 'OK' });
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // POST 요청 처리
-  let userText = 'Unknown';
-  let requestBody = null;
-  
-  try {
-    // 요청 본문 처리 - 여러 방법 시도
-    if (req.body) {
-      if (typeof req.body === 'string') {
-        requestBody = JSON.parse(req.body);
-      } else {
-        requestBody = req.body;
-      }
-    }
-    
-    console.log('Parsed Body:', requestBody);
-    
-    if (requestBody && requestBody.userRequest) {
-      userText = requestBody.userRequest.utterance || 'No utterance';
-    } else {
-      userText = 'No userRequest found';
-    }
-    
-  } catch (error) {
-    console.error('Error processing request:', error);
-    userText = `Error: ${error.message}`;
-  }
-
-  // 카카오 챗봇 응답 형식
+  // 기본 응답 (일단 하드코딩으로 테스트)
   const response = {
     "version": "2.0",
     "template": {
       "outputs": [{
         "simpleText": {
-          "text": `안녕하세요! '${userText}' 라고 하셨네요.`
+          "text": "안녕하세요! 카카오 스킬이 정상 작동합니다."
         }
       }]
     }
   };
 
-  console.log('Sending Response:', JSON.stringify(response, null, 2));
-  
-  // 응답 헤더 설정
+  console.log('Sending basic response');
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   return res.status(200).json(response);
+}
+
+// body 파싱을 위한 설정
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
 }

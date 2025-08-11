@@ -1,1 +1,7 @@
-{}
+{
+    "functions": {
+      "api/skill.js": {
+        "maxDuration": 10
+      }
+    }
+  }
