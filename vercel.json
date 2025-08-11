@@ -1,12 +1,1 @@
-{
-    "builds": [
-      {
-        "src": "skill.py",
-        "use": "@vercel/python"
-      }
-    ],
-    "routes": [
-      { "src": "/api/skill/?", "dest": "/skill.py" },
-      { "src": "/skill/?", "dest": "/skill.py" }
-    ]
-  }
+{}
