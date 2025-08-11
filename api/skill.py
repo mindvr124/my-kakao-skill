@@ -11,15 +11,21 @@ async def skill_endpoint(request: Request):
     except Exception:
         user_text = ""
 
+    response_body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": f"안녕하세요! '{user_text}' 라고 하셨네요."
+                    }
+                }
+            ]
+        }
+    }
+
     return JSONResponse(
-        content={
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {"simpleText": {"text": f"안녕하세요! '{user_text}' 라고 하셨네요."}}
-                ]
-            }
-        },
+        content=response_body,
         status_code=200,
-        media_type="application/json; charset=utf-8"
+        headers={"Content-Type": "application/json;charset=UTF-8"}
     )
