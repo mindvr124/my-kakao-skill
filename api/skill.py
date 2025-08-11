@@ -1,14 +1,15 @@
-# api/skill.py
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Request, Response
+import json
 
 app = FastAPI()
 
-async def _skill_handler(request: Request):
+@app.post("/api/skill")
+async def skill_endpoint(request: Request):
     try:
         body = await request.json()
     except Exception:
         body = {}
+
     user_text = (body.get("userRequest") or {}).get("utterance") or ""
 
     resp = {
@@ -19,18 +20,7 @@ async def _skill_handler(request: Request):
             ]
         }
     }
-    return JSONResponse(
-        content=resp,
-        media_type="application/json;charset=UTF-8",
-        status_code=200
-    )
 
-# POST 라우트 3개 다 열어둠 (vercel 라우팅 어디로 들어와도 OK)
-app.add_api_route("/", _skill_handler, methods=["POST"])
-app.add_api_route("/skill", _skill_handler, methods=["POST"])
-app.add_api_route("/api/skill", _skill_handler, methods=["POST"])
-
-# 헬스체크 (GET)
-@app.get("/")
-def health():
-    return {"ok": True, "paths": ["/", "/skill", "/api/skill"]}
+    # 카카오 호환: application/json (charset 제거), 공백 없는 JSON
+    payload = json.dumps(resp, ensure_ascii=False, separators=(',', ':'))
+    return Response(content=payload, media_type="application/json", status_code=200)
