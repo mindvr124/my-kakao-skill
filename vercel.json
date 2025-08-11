@@ -1,11 +1,12 @@
 {
-    "functions": {
-      "skill.py": {
-        "runtime": "python3.9"
+    "builds": [
+      {
+        "src": "skill.py",
+        "use": "@vercel/python"
       }
-    },
+    ],
     "routes": [
-      { "src": "/api/skill", "dest": "/skill.py" },
-      { "src": "/api/skill/", "dest": "/skill.py" }
+      { "src": "/api/skill/?", "dest": "/skill.py" },
+      { "src": "/skill/?", "dest": "/skill.py" }
     ]
   }
